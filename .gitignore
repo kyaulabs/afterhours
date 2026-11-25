@@ -1,3 +1,2 @@
-# Visual Studio cache directory
-*/.vs/
-.vs/
+/dist/
+__pycache__/

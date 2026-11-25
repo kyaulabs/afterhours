@@ -1,0 +1,9 @@
+version:5023
+graphicsPreset:"custom"
+preferredGraphicsBackend:"opengl"
+renderDistance:16
+simulationDistance:8
+maxFps:90
+enableVsync:false
+soundCategory_ambient:0.65
+soundCategory_weather:0.55
