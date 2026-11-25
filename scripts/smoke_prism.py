@@ -106,7 +106,9 @@ def run(args, tmp):
     local = settings["General"]
     memory = local if local.getboolean("OverrideMemory", fallback=False) else launcher["General"]
     options_source = local if local.getboolean("OverrideJavaArgs", fallback=False) else launcher["General"]
-    java_args = args.jvm_arg if args.jvm_arg is not None else shlex.split(options_source.get("JvmArgs", ""))
+    # Prism uses the global value when an enabled override has no stored value of its own.
+    effective_args = options_source.get("JvmArgs", launcher["General"].get("JvmArgs", ""))
+    java_args = args.jvm_arg if args.jvm_arg is not None else shlex.split(effective_args)
     write_args(game / "launch.args", [
         f"-Xms{memory.getint('MinMemAlloc', 512)}m", f"-Xmx{memory.getint('MaxMemAlloc', 4096)}m", *java_args,
         "-Xlog:gc,safepoint", "--enable-native-access=ALL-UNNAMED", f"-Dfabric.addMods={probe.as_posix()}",
@@ -116,20 +118,26 @@ def run(args, tmp):
         "--width", width, "--height", height, "--disableMultiplayer",
     ])
     log = DIST / "smoke.log"
-    with log.open("wb") as output:
-        subprocess.run([jdk / "javaw.exe", "@launch.args"], cwd=game, stdout=output,
-                       stderr=subprocess.STDOUT, timeout=420, check=True)
-    result = log.read_text(encoding="utf-8", errors="replace")
+    run_log = tmp / "smoke.log"
+    try:
+        with run_log.open("wb") as output:
+            subprocess.run([jdk / "javaw.exe", "@launch.args"], cwd=game, stdout=output,
+                           stderr=subprocess.STDOUT, timeout=420, check=True)
+        result = run_log.read_text(encoding="utf-8", errors="replace")
+    finally:
+        run_log.replace(log)
     pauses = sorted(int(ns) / 1e6 for ns in re.findall(r'Safepoint "(?:G1|Z)[^"]*".*Total: (\d+) ns', result))
     if pauses:
         print(f"GC safepoints ({len(pauses)}): p95 {pauses[(len(pauses) * 95 - 1) // 100]:.2f} ms, max {pauses[-1]:.2f} ms")
     selected = next(file["path"].split("/")[-1] for file in index["files"] if file["path"].startswith("shaderpacks/"))
-    for marker in ("AFTERHOURS_WORLD_OK", "Using graphics backend OpenGL", f"Using shaderpack: {selected}",
+    for marker in ("AFTERHOURS_WORLD_OK", "Set the weather to rain", "Using graphics backend OpenGL", f"Using shaderpack: {selected}",
                    "Profile: HIGH", "Creating pipeline for dimension minecraft:overworld"):
         if marker not in result:
             raise ValueError(f"Missing {marker!r} in {log}")
     if re.search("falling back to vanilla|failed to create shader rendering pipeline", result, re.I):
         raise ValueError(f"Shader fallback in {log}")
+    if error := re.search(r"Mod \S+ provides a broken implementation of ModMenuApi", result):
+        raise ValueError(f"{error.group()}. See {log}")
     rows = re.findall(r"AFTERHOURS_SAMPLE (clear|rain) (\d+) (\d+x\d+) (\d+) (\d+)", result)
     for weather in ("clear", "rain"):
         samples = [int(fps) for phase, fps, size, render, sim in rows

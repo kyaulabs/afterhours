@@ -4,7 +4,7 @@ The first AfterHours build keeps vanilla survival progression and adds structure
 
 ## Graphics and sound
 
-The reference machine has a Ryzen 7 3700X, 64 GiB of RAM, and a GeForce RTX 5070 with 12 GiB of VRAM driving a 3440 × 1440 display. Prism uses Java 25 with a 2–6 GiB heap. Minecraft starts on OpenGL at a 90 FPS cap, with VSync off, 16 chunks visible, and 8 chunks simulated. The archive sets the game options and shader. Heap sizes belong to the launcher instance.
+The reference machine has a Ryzen 7 3700X, 64 GiB of RAM, and a GeForce RTX 5070 with 12 GiB of VRAM driving a 3440 × 1440 display. Prism uses Java 25 with `-XX:+UseZGC` and a 2–6 GiB heap. Minecraft starts on OpenGL at a 90 FPS cap, with VSync off, 16 chunks visible, and 8 chunks simulated. The archive sets the game options and shader.
 
 | Mods | AfterHours setting |
 | --- | --- |
@@ -27,16 +27,12 @@ The reference machine has a Ryzen 7 3700X, 64 GiB of RAM, and a GeForce RTX 5070
 | Enchantment Descriptions, PrickleMC | Hold Shift to read descriptions. Prickle reads the supplied settings. |
 | Mod Menu | Exclude libraries and child modules from the displayed count and hide the update badge. |
 | Fabric API, Placeholder API | Use the versions pinned in the manifest. Their dependent mods supply the player-facing behavior. |
+| AppleSkin, Cloth Config API | Hold food on the hotbar to preview the hunger and saturation it restores. Cloth Config makes AppleSkin’s settings available in Mod Menu. Install AppleSkin on the server for accurate saturation in multiplayer. [AppleSkin 3.0.10](https://modrinth.com/mod/appleskin/version/PHjDtQay) · [Cloth Config 26.3.161](https://modrinth.com/mod/cloth-config/version/x10ElkQ0) |
+| Mouse Tweaks | Drag stacks through the crafting grid or scroll to transfer items between a chest and inventory. [2.31](https://modrinth.com/mod/mouse-tweaks/version/LeMuMhLv) |
+| Shulker Box Tooltip | Hold Shift over a shulker box in your inventory to preview its contents. [5.4.3](https://modrinth.com/mod/shulkerboxtooltip/version/60krd8u8) |
+| Continuity | Select the bundled connected-texture resource pack to join the edges of adjacent glass blocks. [3.0.1](https://modrinth.com/mod/continuity/version/Jt2sCWTQ) |
+| Chat Heads | See the sender’s player head beside each multiplayer chat message. [1.3.3](https://modrinth.com/mod/chat-heads/version/9O2ZSOkh) |
 
-## Suggested additions
+## Suggested addition
 
-Start with the first three. They help with everyday decisions and inventory handling from the first meal through end-game storage. The remaining choices add atmosphere or multiplayer polish. Each link points to a Fabric build for **Minecraft 26.3**. These are candidates for the next playtest.
-
-| Order | Candidate | What to try |
-| --- | --- | --- |
-| 1 | AppleSkin | Compare two foods on the hotbar and see how much hunger and saturation each restores. Use the server component for accurate saturation on multiplayer. [3.0.10](https://modrinth.com/mod/appleskin/version/PHjDtQay) |
-| 2 | Mouse Tweaks | Drag stacks through a crafting grid and scroll items between a chest and inventory. Test scrolling beside the JEI panel. [2.31](https://modrinth.com/mod/mouse-tweaks/version/LeMuMhLv) |
-| 3 | Shulker Box Tooltip | Hold Shift over a shulker to preview its contents before placing it. Check the interaction with enchanted-item tooltips. [5.4.3](https://modrinth.com/mod/shulkerboxtooltip/version/60krd8u8) |
-| 4 | Presence Footsteps | Walk a route across timber, grass, and stone, then repeat it in rain. Listen for footsteps against AmbientSounds and Particle Rain. [1.14.1](https://modrinth.com/mod/presence-footsteps/version/PV68dcBA) |
-| 5 | Continuity | Try its bundled connected-texture pack on a glass wall and compare the seams with Complementary enabled. [3.0.1](https://modrinth.com/mod/continuity/version/Jt2sCWTQ) |
-| 6 | Chat Heads | Put player faces beside chat messages on the first multiplayer playtest. [1.3.3](https://modrinth.com/mod/chat-heads/version/9O2ZSOkh) |
+Presence Footsteps is the remaining candidate. Compare walking on timber, grass, and stone in clear weather and rain to hear how its footsteps mix with AmbientSounds and Particle Rain. [Fabric 1.14.1 for Minecraft 26.3](https://modrinth.com/mod/presence-footsteps/version/PV68dcBA)

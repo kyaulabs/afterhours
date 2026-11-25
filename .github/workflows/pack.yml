@@ -27,6 +27,16 @@ jobs:
       - name: Read validated pack version
         id: version
         run: echo "tag=v$(jq -r .versionId pack/modrinth.index.json)" >> "$GITHUB_OUTPUT"
+      - name: Check the release version before merging to main
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          [[ "$TAG" =~ -(alpha|beta|rc)\.[0-9]+$ ]] || { echo "Expected a prerelease version"; exit 1; }
+          gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$TAG" |
+            jq -e --arg ref "refs/tags/$TAG" 'all(.[]; .ref != $ref)' ||
+            { echo "Cannot confirm that $TAG is available"; exit 1; }
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: AfterHours

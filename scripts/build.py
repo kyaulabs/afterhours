@@ -8,7 +8,7 @@ from pathlib import Path, PurePosixPath
 from tempfile import TemporaryDirectory
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
-from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+from zipfile import ZipFile, ZipInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,7 +65,7 @@ def build(tag, verify_downloads):
     downloads = check_files(index, verify_downloads)
     sources = [manifest]
     for folder in ("overrides", "client-overrides", "server-overrides"):
-        for path in sorted((PACK / folder).rglob("*")):
+        for path in sorted((PACK / folder).rglob("*"), key=lambda item: item.as_posix()):
             if path.is_symlink():
                 raise ValueError(f"Override must be a regular file: {path}")
             if path.is_file():
@@ -83,7 +83,8 @@ def build(tag, verify_downloads):
                 member = ZipInfo(path.relative_to(PACK).as_posix())
                 member.create_system = 3
                 member.external_attr = 0o100644 << 16
-                archive.writestr(member, path.read_bytes(), compress_type=ZIP_DEFLATED)
+                # Stored entries keep these small text files identical across zlib versions.
+                archive.writestr(member, path.read_bytes())
         with ZipFile(output) as archive:
             if archive.testzip() is not None:
                 raise ValueError("Archive integrity check failed")

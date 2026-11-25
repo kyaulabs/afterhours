@@ -13,9 +13,9 @@ AfterHours is a Fabric modpack for Minecraft Java 26.3. Explore Dungeons and Tav
 
 ## Play
 
-Download the `.mrpack` from the latest AfterHours prerelease. In Prism Launcher, choose **Add Instance → Import**, select the file, and launch with Java 25. Prism downloads the 24 mods and the shader from their pinned Modrinth files. [GitHub releases](https://github.com/kyaulabs/afterhours/releases)
+Download the `.mrpack` from the latest AfterHours prerelease. In Prism Launcher, choose **Add Instance → Import**, select the file, and launch with Java 25. Prism downloads the 30 mods and the shader from their pinned Modrinth files. [GitHub releases](https://github.com/kyaulabs/afterhours/releases)
 
-The starting profile uses Complementary Unbound High through Iris and OpenGL, with a 90 FPS cap, 16 chunks of render distance, and 8 chunks of simulation distance. On the reference PC, set the instance memory to 2048 MiB minimum and 6144 MiB maximum. Prism manages memory separately from the pack archive. [Pack settings and proposed additions](docs/vanilla-plus.md)
+The starting profile uses Complementary Unbound High through Iris and OpenGL, with a 90 FPS cap, 16 chunks of render distance, and 8 chunks of simulation distance. On the reference PC, use the JVM argument `-XX:+UseZGC` with 2048 MiB minimum and 6144 MiB maximum memory. Prism stores these Java settings separately from the pack archive. [Pack settings](docs/vanilla-plus.md)
 
 ## Build
 
