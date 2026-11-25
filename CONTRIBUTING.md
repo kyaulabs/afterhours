@@ -1,38 +1,22 @@
 # Contributing
 
-Thanks for taking an interest in this project. We want to make contributing to this project as easy and transparent as possible, whether it is:
+Start from `develop`. Use a conventional commit type, your username, six random hex digits from `openssl rand -hex 3`, and a short description in the branch name. Follow the repository's commit types, sign commits with GPG, and include a body explaining the change. Enable the supplied hooks with `git config core.hooksPath .github/hooks`. They require Gitleaks and commitlint with the conventional preset. [Maintainer instructions](AGENTS.md)
 
-* Reporting a bug
-* Discussing the current state of the code
-* Submitting a fix
-* Proposing new features
-* Becoming a maintainer
+## Test a pack change
 
-## We Develop with Github
+1. Update the pinned entry in `pack/modrinth.index.json` and edit any affected client overrides. Keep saves, launcher identities, generated caches, and third-party archives outside the source tree.
+2. Run `python scripts/build.py --verify-downloads` with Python 3.11 or newer. The builder checks both upstream hashes and the byte count before creating the archive and checksum.
+3. For gameplay or rendering changes, run `python scripts/smoke_prism.py "<Prism instance directory>" --size 3440x1440` on the reference PC. The Windows runner uses the instance's cached jars and Prism Java 25 JDK. It opens a temporary single-player world, samples the spawn in clear weather and rain, then closes the game. Results and startup diagnostics are in `dist/smoke.log`. To check a different display, pass its resolution.
+4. Open a PR into `develop` with the supplied template. Record the build result, the settings the game actually loaded, and the outcome of the affected gameplay check.
 
-We use Github to host code, to track issues and feature requests, as well as accept pull requests. Discussion and general support is typically done through Discord.
+## Cut a prerelease
 
-## We Use [Git Flow](https://www.gitkraken.com/learn/git/git-flow)
+Set `versionId` in the pack manifest to the next prerelease, such as `0.1.0-alpha.2`. Use a release PR from `develop` or a `release/<version>` branch into `main`. Finish the test plan, have `kyau` approve, and merge as `kyaulabs-bot`. Each promotion to `main` needs its own pack version.
 
-<div align="center" style="background:#0d1117"><img src=".github/media/git-flow.svg" width="240" height="365" style="margin-bottom:2ch" /></div>
+After the merge, Actions builds and verifies the pack, tags the merged commit as `v<versionId>`, and publishes the archive and SHA-256 file as a GitHub prerelease. The workflow can resume a draft or verify an existing release on a rerun. It rejects a tag already assigned to a different commit.
 
-All code changes happen through pull requests and are the best way to propose changes to the codebase. We actively welcome your pull requests:
+The organization’s `BOT_TOKEN` opens a PR from `main` back into `develop`. After `kyau` approves that PR, Actions tests the proposed merge and `kyaulabs-bot` merges the reviewed commit. If the branches conflict, resolve the conflict through review before promoting another release.
 
-1. Fork the repo and create your own branch off of the `develop` branch.
-2. Name your branch `feat/<name>-<hash>-<desc>` where:
-   * `<name>` is your Github username
-   * `<hash>` is equal to `openssl rand hex 2`
-   * `<desc>` is a short description using hyphen as a separator
-3. If you have added code that should be tested, add tests.
-4. If you have changed APIs, update the documentation.
-5. Ensure it passes whatever tests are being used.
-6. Make sure your code lints.
-7. Issue the pull request!
+## Report an issue
 
-## Reporting Bugs / Feature Requests
-
-We use Github issues to track public bugs and feature requests. Report a bug/feature by [opening a new issue](/../../issues); it is that easy!
-
-## Contributions & Software Licensing
-
-In short, when you submit code changes, your submissions are understood to be under the same [license](LICENSE) that covers the project itself. If you have a concern about this, please refrain from submitting a PR and contact a maintainer directly.
+Include the AfterHours version, the steps that reproduce the problem, and the relevant lines from `latest.log`. For graphical problems, include the GPU, resolution, shader profile, and whether the issue persists with shaders disabled. [Open an issue](https://github.com/kyaulabs/afterhours/issues/new/choose)

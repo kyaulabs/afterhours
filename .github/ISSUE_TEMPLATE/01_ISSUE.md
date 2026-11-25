@@ -1,27 +1,16 @@
 ---
-name: "🎫 Issue"
-about: "Report a bug, request a feature, or track a task"
-blank_issues_enabled: false
+name: "🎫 AfterHours issue"
+about: "Report a pack problem or propose an addition"
 ---
 
 ## 📋 Summary
 
-<!-- Brief description of the issue -->
+<!-- Describe what happened or what the proposed change adds to survival. -->
 
-## 📍 Location
+## 📍 Environment
 
-<!-- Files, directories, or components affected (or "N/A") -->
+<!-- Pack version, launcher, and relevant mods. For rendering issues include the GPU, resolution, and shader profile. -->
 
-## 🧠 Why It Matters
+## ✅ Reproduction or acceptance criteria
 
-<!-- Why this issue matters — impact, urgency, rationale -->
-
-## 🛠️ Recommended Implementation
-
-<!-- Suggested approach, if known. Leave blank if unsure. -->
-
-## ✅ Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+<!-- List reproduction steps and the expected result, or describe how to test the proposal. Attach a relevant log excerpt for crashes. -->

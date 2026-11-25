@@ -1,0 +1,5 @@
+* text=auto
+.gitignore text eol=lf
+/pack/** text eol=lf
+*.png binary
+.github/hooks/* text eol=lf
